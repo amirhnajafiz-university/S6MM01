@@ -12,6 +12,7 @@ from rlc.rlc import run_length_encoding
 import numpy as np
 import os
 import time
+import pickle
 
 
 
@@ -61,6 +62,7 @@ if __name__ == "__main__":
     y, cr, cb = get_zigzags(y, cr, cb, ws)
     print(f'[OK][{time.time() - start_time}s] Performing ZigZag iteration')
 
+    start_time = time.time()
     # find the run length encoding for each channel
     # then get the frequency of each component in order to form a Huffman dictionary
     yEncoded = run_length_encoding(y)
@@ -74,6 +76,20 @@ if __name__ == "__main__":
     cbEncoded = run_length_encoding(cb)
     cbFrequencyTable = get_freq_dict(cbEncoded)
     cbHuffman = find_huffman(cbFrequencyTable)
+
+    print(f'[OK][{time.time() - start_time}s] Huffman coding')
+
+    # saving encodeds
+    with open(os.path.join(OUTPUT_DIR, "encode_" + path.split('.')[0] + ".pickle"), "wb") as myFile:
+        pickle.dump(yEncoded, myFile, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(crEncoded, myFile, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(cbEncoded, myFile, protocol=pickle.HIGHEST_PROTOCOL)
+    
+    # saving huffman trees
+    with open(os.path.join(OUTPUT_DIR, "htrees_" + path.split('.')[0] + ".pickle"), "wb") as myFile:
+        pickle.dump(yHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(crHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(cbHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
 
     # calculate the number of bits to transmit for each channel
     # and write them to an output file
@@ -95,8 +111,9 @@ if __name__ == "__main__":
     file.close()
 
     totalNumberOfBitsAfterCompression = len(yBitsToTransmit) + len(crBitsToTransmit) + len(cbBitsToTransmit)
-    print(
-        'Compression Ratio is ' + str(
-            np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 2)))
     
+    print(f'[INFO] Compressed image size: {totalNumberOfBitsAfterCompression}b')
+    print(
+        '[INFO] Compression Ratio is ' + str(
+            np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 2)))
     print('[OK] Done')
