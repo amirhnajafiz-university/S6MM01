@@ -50,10 +50,6 @@ def quantize(y, cr, cb):
 
     # define 3 empty matrices to store the quantized values
     yq, crq, cbq = np.zeros((yLength, yWidth)), np.zeros((cLength, cWidth)), np.zeros((cLength, cWidth))
-    # and another 3 for the zigzags
-    yZigzag = np.zeros(((vBlocksForY * hBlocksForY), windowSize * windowSize))
-    crZigzag = np.zeros(((vBlocksForC * hBlocksForC), windowSize * windowSize))
-    cbZigzag = np.zeros(((vBlocksForC * hBlocksForC), windowSize * windowSize))
 
     # number of iteration on x axis and y axis to calculate the luminance cosine transform values
     hBlocksForY = int(len(yDct[0]) / windowSize)  # number of blocks in the horizontal direction for luminance
