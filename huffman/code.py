@@ -1,15 +1,15 @@
 """
-this method calculates the probabilites of an string
+this method calculates the probabilites of a list
 """
-def calculate_probability(string):
+def calculate_probability(l):
     freq = {}
-    for c in string:
+    for c in l:
         if c in freq:
             freq[c] += 1
         else:
             freq[c] = 1
     freq = sorted(freq.items(), key=lambda x: x[1], reverse=True)
-    length = len(string)
+    length = len(l)
 
     probabilities = [float("{:.2f}".format(frequency[1]/length)) for frequency in freq]
     probabilities = sorted(probabilities, reverse=True)
