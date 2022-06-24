@@ -16,7 +16,7 @@ def trim(array: np.ndarray) -> np.ndarray:
     return trimmed
 
 
- """
+"""
 finds the intermediary stream representing 
 the zigzags.
 format for DC components is <size><amplitude>

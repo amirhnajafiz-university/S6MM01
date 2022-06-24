@@ -18,14 +18,14 @@ if __name__ == "__main__":
     path = 'assets/photo1.png' # input("[Enter the file path] > ")
     pix, width, height = read_image_file(path)
 
-    print(f'Image read: {w}x{h}')
+    print(f'Image read: {width}x{height}')
 
     # converting to YCrCb
     pix = rgb2ycbcr(pix)
 
-    y = np.zeros((height, width), np.float32) + img[:, :, 0]
-    cr = np.zeros((height, width), np.float32) + img[:, :, 1]
-    cb = np.zeros((height, width), np.float32) + img[:, :, 2]
+    y = np.zeros((height, width), np.float32) + pix[:, :, 0]
+    cr = np.zeros((height, width), np.float32) + pix[:, :, 1]
+    cb = np.zeros((height, width), np.float32) + pix[:, :, 2]
 
     # size of the image in bits before compression
     totalNumberOfBitsWithoutCompression = len(y) * len(y[0]) * 8 + len(cb) * len(cb[0]) * 8 + len(cr) * len(cr[0]) * 8

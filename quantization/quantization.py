@@ -1,7 +1,7 @@
 import numpy as np
 
-from padding import give_padding
-from dct import perform_dct
+from .padding import give_padding
+from .dct import perform_dct
 
 
 
