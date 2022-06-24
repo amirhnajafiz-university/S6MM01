@@ -9,14 +9,23 @@ from huffman.huffman import find_huffman, get_freq_dict
 
 from rlc.rlc import run_length_encoding
 
-import numpy as np 
+import numpy as np
+import os
 
+
+
+INPUT_DIR = 'in'
+OUTPUT_DIR = 'out'
 
 
 if __name__ == "__main__":
+    # check the output directory
+    if not os.path.exists(OUTPUT_DIR):
+        os.mkdir(OUTPUT_DIR)
+    
     # get the input file
-    path = 'assets/photo1.png' # input("[Enter the file path] > ")
-    pix, width, height = read_image_file(path)
+    path = 'photo1.png' # input("[Enter the file path] > ")
+    pix, width, height = read_image_file(os.path.join(INPUT_DIR, path))
 
     print(f'Image read: {width}x{height}')
 
@@ -55,7 +64,7 @@ if __name__ == "__main__":
 
     # calculate the number of bits to transmit for each channel
     # and write them to an output file
-    file = open("CompressedImage.asfh", "w")
+    file = open(os.path.join(OUTPUT_DIR, path.split('.')[0] + ".asfh"), "w")
     yBitsToTransmit = str()
     for value in yEncoded:
         yBitsToTransmit += yHuffman[value]
