@@ -1,6 +1,5 @@
 import numpy as np
 
-from sampling import sample
 from padding import give_padding
 from dct import perform_dct
 
@@ -39,9 +38,6 @@ def quantize(y, cr, cb):
     # define window size
     windowSize = len(QTY)
 
-    # sample 
-    y, cr, cb = sample(y, cr, cb)
-
     # padding
     y, cr, cb, yWidth, yLength, cWidth, cLength = give_padding(y, cr, cb, windowSize)
 
@@ -71,4 +67,4 @@ def quantize(y, cr, cb):
             cbq[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = np.ceil(
                 cbDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTC)
     
-    return yq, crq, cbq
+    return yq, crq, cbq, windowSize

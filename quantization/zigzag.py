@@ -5,7 +5,7 @@ from rlc.iterate import zigzag
 """
 this function performs the zigzags on our matrix.
 """
-def get_zigzags(y, cr, cb,vBlocksForY, hBlocksForY, vBlocksForC, hBlocksForC, windowSize):
+def get_zigzags(y, cr, cb, windowSize):
     # number of iteration on x axis and y axis to calculate the luminance cosine transform values
     hBlocksForY = int(len(y[0]) / windowSize)  # number of blocks in the horizontal direction for luminance
     vBlocksForY = int(len(y) / windowSize)  # number of blocks in the vertical direction for luminance
