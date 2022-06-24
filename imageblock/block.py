@@ -59,7 +59,7 @@ class ImageBlock():
     """
     takes the blocks and indices and returns the image
     """
-    def backward(self, blocks, indices):
+    def make_image(self, blocks, indices):
         # Empty image array
         image = np.zeros((self.image_height, self.image_width, self.image_channel)).astype(int)
         for block, index in zip(blocks, indices):

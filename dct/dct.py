@@ -29,11 +29,11 @@ class DCT2D():
     """
     performs the dct2 operation
     """
-    def forward(self, x):
+    def form(self, x):
         return dct2(x, self.norm)
     
     """
     performs the idct2 operation
     """
-    def backward(self,x):
+    def deform(self,x):
         return idct2(x, self.norm)
