@@ -1,7 +1,7 @@
 # in project imports
 from imageblock.block import ImageBlock
 from dct.dct import dct2, idct2
-from quantization.quantization import Quantization
+from quantization.quantization import quantize
 from huffman.code import calculate_probability, HuffmanCode
 from utils.reader import read_image_file
 from utils.image import create_image, save_image
@@ -16,7 +16,6 @@ from multiprocessing.pool import Pool
 
 # global variables
 imbl = ImageBlock(block_height=8, block_width=8)
-quiz = Quantization()
 
 
 """
@@ -25,13 +24,14 @@ This function processes a single block of our image
 def process_block(block, index):
     # DCT
     encoded = dct2(block)
+    
     if index[2] == 0:
         channel_type = 'lum'
     else:
         channel_type = 'chr'
         
     # Quantization
-    encoded = quiz.quantize(encoded, channel_type)
+    encoded = quantize(encoded, channel_type)
 
     # performing huffman coding
     # encoded = HuffmanCode(calculate_probability(encoded.tolist()))
