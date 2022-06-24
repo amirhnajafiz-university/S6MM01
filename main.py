@@ -27,10 +27,12 @@ if __name__ == "__main__":
     path = 'photo1.png' # input("[Enter the file path] > ")
     pix, width, height = read_image_file(os.path.join(INPUT_DIR, path))
 
-    print(f'Image read: {width}x{height}')
+    print(f'[OK] Input file: {os.path.join(INPUT_DIR, path)}')
+    print(f'[OK] Image read: {width}x{height}')
 
     # converting to YCrCb
     pix = rgb2ycbcr(pix)
+    print(f'[OK] Convert to YCrCb: {pix.shape}')
 
     y = np.zeros((height, width), np.float32) + pix[:, :, 0]
     cr = np.zeros((height, width), np.float32) + pix[:, :, 1]
@@ -38,15 +40,19 @@ if __name__ == "__main__":
 
     # size of the image in bits before compression
     totalNumberOfBitsWithoutCompression = len(y) * len(y[0]) * 8 + len(cb) * len(cb[0]) * 8 + len(cr) * len(cr[0]) * 8
+    print(f'[INFO] Total input: {totalNumberOfBitsWithoutCompression}b')
 
     # sampleing
     y, cr, cb = sample(y, cr, cb)
+    print('[OK] Chroma subsampling')
 
     # quantizing
     y, cr, cb, ws = quantize(y, cr, cb)
+    print('[OK] Quantized')
 
     # zigzags
     y, cr, cb = get_zigzags(y, cr, cb, ws)
+    print('[OK] Performing ZigZag iteration')
 
     # find the run length encoding for each channel
     # then get the frequency of each component in order to form a Huffman dictionary
@@ -83,5 +89,7 @@ if __name__ == "__main__":
 
     totalNumberOfBitsAfterCompression = len(yBitsToTransmit) + len(crBitsToTransmit) + len(cbBitsToTransmit)
     print(
-        "Compression Ratio is " + str(
-            np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 1)))
+        'Compression Ratio is ' + str(
+            np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 2)))
+    
+    print('[OK] Done')
