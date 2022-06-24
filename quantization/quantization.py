@@ -68,4 +68,6 @@ def quantize(y, cr, cb):
             cbq[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = np.ceil(
                 cbDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTC)
     
+    print(f'[INFO] Total number of operations: {vBlocksForC * hBlocksForC + vBlocksForY * hBlocksForY}')
+    
     return yq, crq, cbq, windowSize

@@ -25,6 +25,8 @@ if __name__ == "__main__":
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     
+    print('[OK] Begin ...')
+    
     # get the input file
     path = 'photo1.png' # input("[Enter the file path] > ")
 
