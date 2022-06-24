@@ -1,3 +1,4 @@
+# in project imports
 from imageblock.block import ImageBlock
 from dct.dct import DCT2D
 from quantization.quantization import Quantization
@@ -7,16 +8,21 @@ from utils.image import create_image, save_image
 from converter.convert import rgb2ycbcr, ycbcr2rgb
 from sampling.sample import chroma_subsampling
 
+# python imports
 import numpy as np
 import pickle
 from multiprocessing.pool import Pool
 
 
+# global variables
 imbl = ImageBlock(block_height=8, block_width=8)
 dct2 = DCT2D()
 quiz = Quantization()
 
 
+"""
+This function processes a single block of our image
+"""
 def process_block(block, index):
     # DCT
     encoded = dct2.form(block)
@@ -46,10 +52,10 @@ if __name__ == "__main__":
 
     # sampling image
     y = chroma_subsampling(pix[:, :, 0])
-    cr = chroma_subsampling(pix[:, :, 1])
-    cb = chroma_subsampling(pix[:, :, 2])
+    cb = chroma_subsampling(pix[:, :, 1])
+    cr = chroma_subsampling(pix[:, :, 2])
 
-    pix = np.stack((y, cr, cb), axis=2)
+    pix = np.stack((y, cb, cr), axis=2)
     
     # creating our blocks
     blocks, indices = imbl.make_blocks(pix)
@@ -69,6 +75,8 @@ if __name__ == "__main__":
 
     # saving image
     save_image(pix, 'photo1.jpeg')
+
+    print("Image saved")
 
     # showing image
     create_image(pix).show()
