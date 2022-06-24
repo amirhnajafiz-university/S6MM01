@@ -24,7 +24,7 @@ This function processes a single block of our image
 def process_block(block, index):
     # DCT
     encoded = dct2(block)
-    
+
     if index[2] == 0:
         channel_type = 'lum'
     else:

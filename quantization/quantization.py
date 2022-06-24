@@ -28,10 +28,10 @@ Q_chr = np.array([
 """
 This function quantizes our blocks
 """
-def quantize(self, x, channel_type):     
+def quantize(x, channel_type):     
     if channel_type == 'lum':
-        Q = self.Q_lum
+        Q = Q_lum
     else:
-        Q = self.Q_chr
+        Q = Q_chr
 
     return np.round(x/Q)   
