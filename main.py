@@ -11,6 +11,7 @@ from rlc.rlc import run_length_encoding
 
 import numpy as np
 import os
+import time
 
 
 
@@ -25,14 +26,17 @@ if __name__ == "__main__":
     
     # get the input file
     path = 'photo1.png' # input("[Enter the file path] > ")
+
+    start_time = time.time()
     pix, width, height = read_image_file(os.path.join(INPUT_DIR, path))
 
     print(f'[OK] Input file: {os.path.join(INPUT_DIR, path)}')
     print(f'[OK] Image read: {width}x{height}')
 
     # converting to YCrCb
+    start_time = time.time()
     pix = rgb2ycbcr(pix)
-    print(f'[OK] Convert to YCrCb: {pix.shape}')
+    print(f'[OK][{time.time() - start_time}s] Convert to YCrCb: {pix.shape}')
 
     y = np.zeros((height, width), np.float32) + pix[:, :, 0]
     cr = np.zeros((height, width), np.float32) + pix[:, :, 1]
@@ -43,16 +47,19 @@ if __name__ == "__main__":
     print(f'[INFO] Total input: {totalNumberOfBitsWithoutCompression}b')
 
     # sampleing
+    start_time = time.time()
     y, cr, cb = sample(y, cr, cb)
-    print('[OK] Chroma subsampling')
+    print(f'[OK][{time.time() - start_time}s] Chroma subsampling')
 
     # quantizing
+    start_time = time.time()
     y, cr, cb, ws = quantize(y, cr, cb)
-    print('[OK] Quantized')
+    print(f'[OK][{time.time() - start_time}s] Quantized')
 
     # zigzags
+    start_time = time.time()
     y, cr, cb = get_zigzags(y, cr, cb, ws)
-    print('[OK] Performing ZigZag iteration')
+    print(f'[OK][{time.time() - start_time}s] Performing ZigZag iteration')
 
     # find the run length encoding for each channel
     # then get the frequency of each component in order to form a Huffman dictionary
