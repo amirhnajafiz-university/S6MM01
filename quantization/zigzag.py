@@ -1,5 +1,7 @@
 from rlc.iterate import zigzag
 
+import numpy as np
+
 
 
 """

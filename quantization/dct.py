@@ -1,9 +1,8 @@
 import numpy as np
-import cv2
+from scipy.fftpack import dct
 
 
-
-def perform_dct(y, cr, cb, yLength, yWidth, cWidth, cLength, windowSize):
+def perform_dct(y, cr, cb, yWidth, yLength, cWidth, cLength, windowSize):
     # get DCT of each channel
     # define three empty matrices
     yDct, crDct, cbDct = np.zeros((yLength, yWidth)), np.zeros((cLength, cWidth)), np.zeros((cLength, cWidth))
@@ -17,15 +16,21 @@ def perform_dct(y, cr, cb, yLength, yWidth, cWidth, cLength, windowSize):
 
     for i in range(vBlocksForY):
         for j in range(hBlocksForY):
-            yDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = cv2.dct(
-                y[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize])
+            yDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = dct(
+                y[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize],
+                norm='ortho'
+            )
     
     # either crq or cbq can be used to compute the number of blocks
     for i in range(vBlocksForC):
         for j in range(hBlocksForC):
-            crDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = cv2.dct(
-                cr[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize])
-            cbDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = cv2.dct(
-                cb[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize])
+            crDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = dct(
+                cr[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize],
+                norm='ortho'
+            )
+            cbDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = dct(
+                cb[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize],
+                norm='ortho'
+            )
             
     return yDct, crDct, cbDct

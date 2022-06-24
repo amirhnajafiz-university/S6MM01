@@ -1,4 +1,5 @@
-import cv2
+import numpy as np
+from scipy.signal import convolve2d
 
 
 
@@ -12,13 +13,15 @@ def sample(y, cr, cb):
     y = y - 128
     cr = cr - 128
     cb = cb - 128
+    
     # define subsampling factors in both horizontal and vertical directions
-    SSH, SSV = 2, 0
+    SSH, SSV = 2, 2
 
-    crf = cv2.boxFilter(cr, ddepth=-1, ksize=(2, 2))
-    cbf = cv2.boxFilter(cb, ddepth=-1, ksize=(2, 2))
+    # creating a 2x2 kernal
+    kernel = np.array([[0.25, 0.25], [0.25, 0.25]])
 
-    crSub = crf[::, ::SSH]
-    cbSub = cbf[::, ::SSH]
+    # subsampling
+    cr = np.repeat(np.repeat(convolve2d(cr, kernel, mode='valid')[::SSV,::SSH], 2, axis=0), 2, axis=1)
+    cb = np.repeat(np.repeat(convolve2d(cb, kernel, mode='valid')[::SSV,::SSH], 2, axis=0), 2, axis=1)
 
-    return y, crSub, cbSub
+    return y, cr, cb
