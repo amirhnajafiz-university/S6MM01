@@ -6,17 +6,37 @@ from utils.reader import read_image_file
 from utils.image import create_image
 from converter.convert import rgb2ycbcr, ycbcr2rgb
 from sampling.sample import chroma_subsampling
+
+import numpy as np
 import pickle
+from multiprocessing.pool import Pool
+
+
+imbl = ImageBlock(block_height=8, block_width=8)
+dct2 = DCT2D()
+quiz = Quantization()
+
+
+def process_block(block, index):
+    # DCT
+    encoded = dct2.form(block)
+    if index[2] == 0:
+        channel_type = 'lum'
+    else:
+        channel_type = 'chr'
+        
+    # Quantization
+    encoded = quiz.quantize(encoded, channel_type)
+
+    # performing huffman coding
+    # encoded = HuffmanCode(calculate_probability(encoded.tolist()))
+
+    return encoded
 
 
 if __name__ == "__main__":
-    imbl = ImageBlock(block_height=8, block_width=8)
-    dct2 = DCT2D()
-    quiz = Quantization()
-
-
     # get the input file
-    path = input("[Enter the file path] > ")
+    path = 'assets/photo1.png' # input("[Enter the file path] > ")
     pix, w, h = read_image_file(path)
 
     print(f'Image read: {w}x{h}')
@@ -30,24 +50,8 @@ if __name__ == "__main__":
     # creating our blocks
     blocks, indices = imbl.make_blocks(pix)
 
-    # proccesing blocks
-    for i in range(len(blocks)):
-        block = blocks[i]
-
-        # performing a DCT2
-        encoded = dct2.form(block)
-
-        # quantizing
-        if indices[i][2] == 0:
-            c_type = 'lum'
-        else:
-            c_type = 'chr'
-        encoded = quiz.quantize(encoded, c_type)
-
-        # performing huffman coding
-        encoded = HuffmanCode(calculate_probability(encoded))
-
-        blocks[i] = block
+    # processing blocks
+    blocks = np.array(Pool().starmap(process_block, zip(blocks, indices)))
 
     # saving huffman
     with open('out.txt', 'w') as file:
