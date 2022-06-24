@@ -1,4 +1,5 @@
 import numpy as np
+from math import ceil
 
 from .padding import give_padding
 from .dct import perform_dct

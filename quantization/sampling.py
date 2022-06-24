@@ -18,7 +18,7 @@ def sample(y, cr, cb):
     crf = cv2.boxFilter(cr, ddepth=-1, ksize=(2, 2))
     cbf = cv2.boxFilter(cb, ddepth=-1, ksize=(2, 2))
 
-    crSub = crf[::SSV, ::SSH]
-    cbSub = cbf[::SSV, ::SSH]
+    crSub = crf[::, ::SSH]
+    cbSub = cbf[::, ::SSH]
 
     return y, crSub, cbSub

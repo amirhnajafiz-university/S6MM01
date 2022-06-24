@@ -5,7 +5,7 @@ from quantization.sampling import sample
 from quantization.quantization import quantize
 from quantization.zigzag import get_zigzags
 
-from huffman.huffman import find_huffman
+from huffman.huffman import find_huffman, get_freq_dict
 
 from rlc.rlc import run_length_encoding
 

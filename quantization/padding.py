@@ -1,3 +1,8 @@
+from math import ceil
+import numpy as np
+
+
+
 """
 this function checks the paddings and gives our
 image paddings if needed.
