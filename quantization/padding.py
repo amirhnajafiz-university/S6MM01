@@ -1,14 +1,8 @@
-from quantization import QTY
-
-
-
 """
 this function checks the paddings and gives our
 image paddings if needed.
 """
-def give_padding(y, cr, cb):
-    # define window size
-    windowSize = len(QTY)
+def give_padding(y, cr, cb, windowSize):
     # calculating the y width and y length
     yWidth, yLength = ceil(len(y[0]) / windowSize) * windowSize, ceil(len(y) / windowSize) * windowSize
     
