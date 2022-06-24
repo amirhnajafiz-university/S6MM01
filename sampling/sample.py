@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.signal import convolve2d
 
 
 """
@@ -9,14 +10,12 @@ def chroma_subsampling(x, ratio='4:2:0'):
     if ratio == '4:4:4':
         return x
     else:
-        out = np.zeros((x.shape))
         # Downsample with a window of 2 in the horizontal direction
         if ratio == '4:2:2':
-            for i in range(0, x.shape[0], 2):
-                out[i:i+2] = np.mean(x[i:i+2], axis=0)
+            kernel = np.array([[0.5], [0.5]])
+            out = np.repeat(convolve2d(x, kernel, mode='valid')[::2,:], 2, axis=0)
         # Downsample with a window of 2 in both directions
         else:
-            for i in range(0, x.shape[0], 2):
-                for j in range(0, x.shape[1], 2):
-                    out[i:i+2, j:j+2] = np.mean(x[i:i+2, j:j+2])
-        return np.round(out).astype('uint8')
+            kernel = np.array([[0.25, 0.25], [0.25, 0.25]])
+            out = np.repeat(np.repeat(convolve2d(x, kernel, mode='valid')[::2,::2], 2, axis=0), 2, axis=1)
+        return np.round(out).astype('int')

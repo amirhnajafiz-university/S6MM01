@@ -3,7 +3,7 @@ from dct.dct import DCT2D
 from quantization.quantization import Quantization
 from huffman.code import calculate_probability, HuffmanCode
 from utils.reader import read_image_file
-from utils.image import create_image
+from utils.image import create_image, save_image
 from converter.convert import rgb2ycbcr, ycbcr2rgb
 from sampling.sample import chroma_subsampling
 
@@ -45,7 +45,11 @@ if __name__ == "__main__":
     pix = rgb2ycbcr(pix)
 
     # sampling image
-    pix = chroma_subsampling(pix)
+    y = chroma_subsampling(pix[:, :, 0])
+    cr = chroma_subsampling(pix[:, :, 1])
+    cb = chroma_subsampling(pix[:, :, 2])
+
+    pix = np.stack((y, cr, cb), axis=2)
     
     # creating our blocks
     blocks, indices = imbl.make_blocks(pix)
@@ -54,8 +58,8 @@ if __name__ == "__main__":
     blocks = np.array(Pool().starmap(process_block, zip(blocks, indices)))
 
     # saving huffman
-    with open('out.txt', 'w') as file:
-        pickle.dump(blocks, file, protocol=pickle.HIGHEST_PROTOCOL)
+    # with open('out.txt', 'w') as file:
+    #    pickle.dump(blocks, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     # re-assemble blocks
     pix = imbl.make_image(blocks, indices)
@@ -64,4 +68,7 @@ if __name__ == "__main__":
     pix = ycbcr2rgb(pix)
 
     # saving image
-    create_image(pix)
+    save_image(pix, 'photo1.jpeg')
+
+    # showing image
+    create_image(pix).show()
