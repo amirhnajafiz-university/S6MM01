@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     # size of the image in bits before compression
     totalNumberOfBitsWithoutCompression = len(y) * len(y[0]) * 8 + len(cb) * len(cb[0]) * 8 + len(cr) * len(cr[0]) * 8
-    print(f'[INFO] Total input: {totalNumberOfBitsWithoutCompression}b')
+    print(f'[INFO] Total input: {np.round(totalNumberOfBitsWithoutCompression / 1024, 5)} kb')
 
     # sampleing
     start_time = time.time()
@@ -90,6 +90,8 @@ if __name__ == "__main__":
         pickle.dump(yHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
         pickle.dump(crHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
         pickle.dump(cbHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
+    
+    print('[OK] Output files created')
 
     # calculate the number of bits to transmit for each channel
     # and write them to an output file
@@ -112,7 +114,7 @@ if __name__ == "__main__":
 
     totalNumberOfBitsAfterCompression = len(yBitsToTransmit) + len(crBitsToTransmit) + len(cbBitsToTransmit)
     
-    print(f'[INFO] Compressed image size: {totalNumberOfBitsAfterCompression}b')
+    print(f'[INFO] Compressed image size: {np.round(totalNumberOfBitsAfterCompression / 1024, 5)} kb')
     print(
         '[INFO] Compression Ratio is ' + str(
             np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 2)))
