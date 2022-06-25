@@ -5,7 +5,7 @@ from quantization.sampling import sample
 from quantization.quantization import quantize
 from quantization.zigzag import get_zigzags
 
-from huffman.huffman import find_huffman, freq
+from huffman.huffman import freq, do_huffman
 
 from rlc.rlc import rlc_coding
 
@@ -72,13 +72,13 @@ if __name__ == "__main__":
     # find the run length encoding for each channel
     # then get the frequency of each component in order to form a Huffman dictionary
     yEncoded = rlc_coding(y)
-    yHuffman = find_huffman(freq(yEncoded))
+    yHuffman = do_huffman(freq(yEncoded))
 
     crEncoded = rlc_coding(cr)
-    crHuffman = find_huffman(freq(crEncoded))
+    crHuffman = do_huffman(freq(crEncoded))
 
     cbEncoded = rlc_coding(cb)
-    cbHuffman = find_huffman(freq(cbEncoded))
+    cbHuffman = do_huffman(freq(cbEncoded))
 
     print(f'[OK][{time.time() - start_time}s] Huffman coding')
 
