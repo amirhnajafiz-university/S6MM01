@@ -12,6 +12,7 @@ from rlc.rlc import rlc_coding
 import numpy as np
 import os
 import time
+from datetime import datetime
 import pickle
 
 
@@ -25,7 +26,7 @@ if __name__ == "__main__":
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     
-    print(f'[OK][{time.time()}] Begin ...')
+    print(f'[OK][{datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}] Begin ...')
     
     # get the input file
     path = input("[Enter the file path] > ")
@@ -115,4 +116,4 @@ if __name__ == "__main__":
     
     print(f'[INFO] Compressed image size: {np.round(totalNumberOfBitsAfterCompression / 1024, 5)} kb')
     print(f'[INFO] Compression Ratio: {np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 3)}')
-    print(f'[OK][{time.time()}] Done')
+    print(f'[OK][{datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}] Done')
