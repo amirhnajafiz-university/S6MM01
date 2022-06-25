@@ -22,7 +22,7 @@ the zigzags.
 format for DC components is <size><amplitude>
 format for AC components is <run_length, size> <Amplitude of non-zero>
 """
-def run_length_encoding(array: np.ndarray) -> list:
+def rlc_coding(array: np.ndarray) -> list:
     # encoded output
     encoded = list()
     # initializing the run length

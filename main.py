@@ -7,7 +7,7 @@ from quantization.zigzag import get_zigzags
 
 from huffman.huffman import find_huffman, freq
 
-from rlc.rlc import run_length_encoding
+from rlc.rlc import rlc_coding
 
 import numpy as np
 import os
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     
-    print('[OK] Begin ...')
+    print(f'[OK][{time.time()}] Begin ...')
     
     # get the input file
     path = input("[Enter the file path] > ")
@@ -41,6 +41,7 @@ if __name__ == "__main__":
     pix = rgb2ycbcr(pix)
     print(f'[OK][{time.time() - start_time}s] Convert to YCrCb: {pix.shape}')
 
+    # showing the YCrCb image
     create_image(pix).show()
 
     y = np.zeros((height, width), np.float32) + pix[:, :, 0]
@@ -69,13 +70,13 @@ if __name__ == "__main__":
     start_time = time.time()
     # find the run length encoding for each channel
     # then get the frequency of each component in order to form a Huffman dictionary
-    yEncoded = run_length_encoding(y)
+    yEncoded = rlc_coding(y)
     yHuffman = find_huffman(freq(yEncoded))
 
-    crEncoded = run_length_encoding(cr)
+    crEncoded = rlc_coding(cr)
     crHuffman = find_huffman(freq(crEncoded))
 
-    cbEncoded = run_length_encoding(cb)
+    cbEncoded = rlc_coding(cb)
     cbHuffman = find_huffman(freq(cbEncoded))
 
     print(f'[OK][{time.time() - start_time}s] Huffman coding')
@@ -96,27 +97,22 @@ if __name__ == "__main__":
 
     # calculate the number of bits to transmit for each channel
     # and write them to an output file
-    file = open(os.path.join(OUTPUT_DIR, path.split('.')[0] + ".asfh"), "w")
-    yBitsToTransmit = str()
-    for value in yEncoded:
-        yBitsToTransmit += yHuffman[value]
+    yBitsToTransmit, crBitsToTransmit, cbBitsToTransmit = str(), str(), str()
+    with open(os.path.join(OUTPUT_DIR, path.split('.')[0] + ".asfh"), "w") as file: 
+        for value in yEncoded:
+            yBitsToTransmit += yHuffman[value]
 
-    crBitsToTransmit = str()
-    for value in crEncoded:
-        crBitsToTransmit += crHuffman[value]
+        for value in crEncoded:
+            crBitsToTransmit += crHuffman[value]
 
-    cbBitsToTransmit = str()
-    for value in cbEncoded:
-        cbBitsToTransmit += cbHuffman[value]
+        for value in cbEncoded:
+            cbBitsToTransmit += cbHuffman[value]
 
-    if file.writable():
         file.write(yBitsToTransmit + "\n" + crBitsToTransmit + "\n" + cbBitsToTransmit)
-    file.close()
 
+    # total number of bites after compression
     totalNumberOfBitsAfterCompression = len(yBitsToTransmit) + len(crBitsToTransmit) + len(cbBitsToTransmit)
     
     print(f'[INFO] Compressed image size: {np.round(totalNumberOfBitsAfterCompression / 1024, 5)} kb')
-    print(
-        '[INFO] Compression Ratio is ' + str(
-            np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 2)))
-    print('[OK] Done')
+    print(f'[INFO] Compression Ratio: {np.round(totalNumberOfBitsWithoutCompression / totalNumberOfBitsAfterCompression, 3)}')
+    print(f'[OK][{time.time()}] Done')
