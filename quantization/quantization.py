@@ -49,25 +49,28 @@ def quantize(y, cr, cb):
     yq, crq, cbq = np.zeros((yLength, yWidth)), np.zeros((cLength, cWidth)), np.zeros((cLength, cWidth))
 
     # number of iteration on x axis and y axis to calculate the luminance cosine transform values
-    hBlocksForY = int(len(yDct[0]) / windowSize)  # number of blocks in the horizontal direction for luminance
-    vBlocksForY = int(len(yDct) / windowSize)  # number of blocks in the vertical direction for luminance
+    hbY = int(len(yDct[0]) / windowSize)  # number of blocks in the horizontal direction for luminance
+    vbY = int(len(yDct) / windowSize)  # number of blocks in the vertical direction for luminance
     # number of iteration on x axis and y axis to calculate the chrominance channels cosine transforms values
-    hBlocksForC = int(len(crDct[0]) / windowSize)  # number of blocks in the horizontal direction for chrominance
-    vBlocksForC = int(len(crDct) / windowSize)  # number of blocks in the vertical direction for chrominance
+    hbC = int(len(crDct[0]) / windowSize)  # number of blocks in the horizontal direction for chrominance
+    vbC = int(len(crDct) / windowSize)  # number of blocks in the vertical direction for chrominance
 
-    for i in range(vBlocksForY):
-        for j in range(hBlocksForY):
+    for i in range(vbY):
+        for j in range(hbY):
             yq[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = np.ceil(
-                yDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTY)
+                yDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTY
+            )
 
     # either crq or cbq can be used to compute the number of blocks
-    for i in range(vBlocksForC):
-        for j in range(hBlocksForC):
+    for i in range(vbC):
+        for j in range(hbC):
             crq[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = np.ceil(
-                crDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTC)
+                crDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTC
+            )
             cbq[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] = np.ceil(
-                cbDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTC)
+                cbDct[i * windowSize: i * windowSize + windowSize, j * windowSize: j * windowSize + windowSize] / QTC
+            )
     
-    print(f'[INFO] Total number of operations: {vBlocksForC * hBlocksForC + vBlocksForY * hBlocksForY}')
+    print(f'[INFO] Total number of operations: {vbC * hbC + vbY * hbY}')
     
     return yq, crq, cbq, windowSize

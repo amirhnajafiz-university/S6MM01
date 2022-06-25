@@ -4,7 +4,7 @@ import numpy as np
 
 
 """
-A Huffman Tree Node
+a huffman tree node
 """
 class Node:
     """
@@ -24,7 +24,7 @@ class Node:
 
 
 """
-prints the huffman tree into a dictionary.
+converts the huffman tree into a dictionary.
 """
 def get_code(node: Node, dic: dict, val='') -> dict:
     # huffman code for current node
