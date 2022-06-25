@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print('[OK] Begin ...')
     
     # get the input file
-    path = 'photo1.png' # input("[Enter the file path] > ")
+    path = input("[Enter the file path] > ")
 
     start_time = time.time()
     pix, width, height = read_image_file(os.path.join(INPUT_DIR, path))
@@ -40,6 +40,8 @@ if __name__ == "__main__":
     start_time = time.time()
     pix = rgb2ycbcr(pix)
     print(f'[OK][{time.time() - start_time}s] Convert to YCrCb: {pix.shape}')
+
+    create_image(pix).show()
 
     y = np.zeros((height, width), np.float32) + pix[:, :, 0]
     cr = np.zeros((height, width), np.float32) + pix[:, :, 1]
