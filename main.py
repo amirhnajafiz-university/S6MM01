@@ -134,7 +134,7 @@ if __name__ == "__main__":
         pickle.dump(cbHuffman, myFile, protocol=pickle.HIGHEST_PROTOCOL)
     
     print('[OK] Output files created')
-
+    
     # calculate the number of bits to transmit for each channel
     # and write them to an output file
     yBitsToTransmit, crBitsToTransmit, cbBitsToTransmit = str(), str(), str()
