@@ -8,7 +8,7 @@ returns a dict where the keys
 are the values of the array, 
 and the values are their frequencies.
 """
-def get_freq_dict(array: list) -> dict:
+def freq(array: list) -> dict:
     data = Counter(array)
     result = {k: d / len(array) for k, d in data.items()}
 
@@ -19,8 +19,9 @@ def get_freq_dict(array: list) -> dict:
 Return pair of symbols 
 from distribution p with lowest probabilities.
 """
-def lowest_prob_pair(p):
+def last_two(p):
     sorted_p = sorted(p.items(), key=lambda x: x[1])
+
     return sorted_p[0][0], sorted_p[1][0]
 
 
@@ -35,7 +36,7 @@ def find_huffman(p: dict) -> dict:
 
     # Create a new distribution by merging lowest probable pair
     p_prime = p.copy()
-    a1, a2 = lowest_prob_pair(p)
+    a1, a2 = last_two(p)
     p1, p2 = p_prime.pop(a1), p_prime.pop(a2)
     p_prime[a1 + a2] = p1 + p2
 
