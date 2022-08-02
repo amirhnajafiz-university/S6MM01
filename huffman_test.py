@@ -9,7 +9,7 @@ import numpy as np
 
 if __name__ == "__main__":
     # input array
-    array = np.array([8, 8, 34, 5, 10, 34, 6, 43, 127, 10, 10, 8, 10, 34, 10])
+    array = "AABEEEDRTTTT"
 
     # input size
     totalNumberOfBitsWithoutCompression = len(array) * 8
